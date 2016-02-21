@@ -1,10 +1,11 @@
-var Rx = require('rx')
+var enabled = true
 
-var attachLog = function(rx){
-  rx = rx || Rx
+var attachLog = function (rx) {
   var output = function(method, message, mapFn){
       return this.map(function(val){
-        console[method](message, mapFn ? mapFn(val) : val)
+        if (enabled){
+          console[method](message, mapFn ? mapFn(val) : val)
+        }
         return val
       })
     }
@@ -14,10 +15,29 @@ var attachLog = function(rx){
       return output.apply(this, [type, message || '', mapFn])
     }
   })
-
   return rx
 }
 
 attachLog(Rx)
 
-module.exports = attachLog
+var rxLog = {
+  attach: attachLog,
+  enable: function(){
+    rxLog.enabled(true)
+  },
+  enabled: function(state){
+    enabled = state
+  },
+  disable: function(){
+    rxLog.enabled(false)
+  }
+}
+
+var g =
+  typeof global === "object" ? global :
+    typeof window === "object" ? window :
+      typeof self === "object" ? self : this;
+
+g.rxLog = rxLog
+
+module.exports = rxLog
