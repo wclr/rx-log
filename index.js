@@ -18,8 +18,6 @@ var attachLog = function (rx) {
   return rx
 }
 
-attachLog(Rx)
-
 var rxLog = {
   attach: attachLog,
   enable: function(){
