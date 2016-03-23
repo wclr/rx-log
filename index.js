@@ -1,25 +1,32 @@
 var enabled = true
 
-var attachLog = function (rx) {
-  var output = function(method, message, mapFn){
-      return this.map(function(val){
-        if (enabled){
-          console[method](message, mapFn ? mapFn(val) : val)
-        }
-        return val
-      })
-    }
+var methods = ['log', 'warn', 'info']
 
-    ;['log', 'warn', 'info'].forEach(function(type){
-    rx.Observable.prototype[type] = function(message, mapFn){
+var attachLog = function(to){
+  var output = function(method, message, mapFn){
+    return this.map(function(val){
+      if (enabled){
+        console[method](message, mapFn ? mapFn(val) : val)
+      }
+      return val
+    })
+  }
+  to && methods.forEach(function(type){
+    to.prototype[type] = function(message, mapFn){
       return output.apply(this, [type, message || '', mapFn])
     }
   })
+}
+
+var attachToRx = function (rx) {
+  attachLog(rx.Observable)
+  attachLog(rx.Subject)
   return rx
 }
 
 var rxLog = {
-  attach: attachLog,
+  attachLog: attachLog,
+  attachToRx: attachToRx,
   enable: function(){
     rxLog.enabled(true)
   },
