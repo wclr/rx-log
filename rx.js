@@ -1,6 +1,6 @@
 var Rx = require('rx')
 var rxLog = require('./index')
 
-rxLog.attach(Rx)
+rxLog.attachToRx(Rx)
 
 module.exports = Rx
