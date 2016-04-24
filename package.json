@@ -1,7 +1,8 @@
 {
   "name": "rx-log",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.1.0",
+  "description": "Log (debug) method for rx.js",
+  "keywords": ["rx", "rxjs", "debug", "logging"],
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
