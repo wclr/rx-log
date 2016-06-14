@@ -2,6 +2,20 @@ var enabled = true
 
 var methods = ['log', 'warn', 'info']
 
+var getTime = function (time) {
+  var addZero = function (x) {
+    return (x < 9 ? '0' : '') + x
+  }
+  var addZero2 = function (x) {
+    return (x < 100 ? '0' : '') + addZero(x)
+  }
+  var h = time.getHours()
+  var m = time.getMinutes()
+  var s = time.getSeconds()
+  var ms = time.getMilliseconds()
+  return [h, m, s].map(addZero).join(':') + '.' + addZero2(ms)
+}
+
 var attachLog = function(to){
   var output = function(method, message, mapFn){
     return this.do(function(val){
@@ -12,6 +26,7 @@ var attachLog = function(to){
         } else {
           args.push(message)
         }
+        args.unshift('[rx-log] ' + getTime(new Date()) + ' -')
         args.push(mapFn ? mapFn(val) : val)
         console[method].apply(console, args)
       }
